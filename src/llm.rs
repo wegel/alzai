@@ -57,7 +57,7 @@ pub fn build_sync_prompt(topic: &str, current_contents: &str, events: &[Event]) 
     let events_json = serde_json::to_string_pretty(events).unwrap_or_default();
     SYNC_PROMPT
         .replace("{topic}", topic)
-        .replace("{current_file_contents}", current_contents)
+        .replace("{current_file_contents}", current_contents.trim())
         .replace("{events_as_json}", &events_json)
 }
 

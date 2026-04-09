@@ -1,0 +1,2 @@
+{"id":"2026-04-09T18:37:42Z-1b78f69c","topic":"pitfalls","seq":1,"kind":"pitfall","title":"gen is a reserved keyword in edition 2024","body":"rand::thread_rng().gen() fails to parse in Rust edition 2024. Use rand::random() instead.","ts":"2026-04-09T18:37:42Z"}
+{"id":"2026-04-09T18:37:44Z-dc6d3a62","topic":"pitfalls","seq":2,"kind":"pitfall","title":"Topic validation requires facts/*.md to exist","body":"alzai log rejects unknown topics by checking facts/<topic>.md existence. To create a new topic, touch the file first — an empty file is enough.","ts":"2026-04-09T18:37:44Z"}
