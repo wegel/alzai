@@ -19,6 +19,7 @@ Rules:
 - Incorporate every new event.
 - Deduplicate — if a new event restates something already present, keep the better phrasing.
 - If two events contradict each other, note the contradiction explicitly.
+- Remove entries that have been resolved, completed, or made obsolete by newer events. A gap that has been filled, a question that has been answered, or a pitfall that has been fixed should be removed entirely — not kept as historical record.
 - Remove anything that is speculative, transient, or task-specific.
 - Organize into sections by event kind (## Facts, ## Pitfalls, ## Decisions, etc.).
 - Adapt sections to whatever kinds are present — don't force a fixed template.
