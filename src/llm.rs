@@ -3,7 +3,7 @@
 use std::io::Write;
 use std::process::{Command, Stdio};
 
-use anyhow::{bail, Context, Result};
+use anyhow::{Context, Result, bail};
 
 use crate::types::Event;
 
@@ -86,7 +86,6 @@ pub fn run_llm(cmd: &str, prompt: &str) -> Result<String> {
         );
     }
 
-    let response = String::from_utf8(output.stdout)
-        .context("LLM output is not valid UTF-8")?;
+    let response = String::from_utf8(output.stdout).context("LLM output is not valid UTF-8")?;
     Ok(response)
 }

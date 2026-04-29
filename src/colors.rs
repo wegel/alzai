@@ -11,20 +11,64 @@ static JSON_MODE: AtomicBool = AtomicBool::new(false);
 
 // --- Text colors ---
 
-const DIM: Color = Color::Rgb { r: 119, g: 119, b: 119 };
-const HIGHLIGHT: Color = Color::Rgb { r: 133, g: 183, b: 235 };
-const OK: Color = Color::Rgb { r: 151, g: 196, b: 89 };
-const WARN: Color = Color::Rgb { r: 239, g: 159, b: 39 };
-const ERR: Color = Color::Rgb { r: 240, g: 149, b: 149 };
-const WHITE: Color = Color::Rgb { r: 255, g: 255, b: 255 };
+const DIM: Color = Color::Rgb {
+    r: 119,
+    g: 119,
+    b: 119,
+};
+const HIGHLIGHT: Color = Color::Rgb {
+    r: 133,
+    g: 183,
+    b: 235,
+};
+const OK: Color = Color::Rgb {
+    r: 151,
+    g: 196,
+    b: 89,
+};
+const WARN: Color = Color::Rgb {
+    r: 239,
+    g: 159,
+    b: 39,
+};
+const ERR: Color = Color::Rgb {
+    r: 240,
+    g: 149,
+    b: 149,
+};
+const WHITE: Color = Color::Rgb {
+    r: 255,
+    g: 255,
+    b: 255,
+};
 
 // --- Pill backgrounds ---
 
-const PILL_DEFAULT_BG: Color = Color::Rgb { r: 50, g: 50, b: 50 };
-const PILL_FACT_BG: Color = Color::Rgb { r: 42, g: 58, b: 26 };
-const PILL_DECISION_BG: Color = Color::Rgb { r: 30, g: 58, b: 95 };
-const PILL_PITFALL_BG: Color = Color::Rgb { r: 58, g: 26, b: 26 };
-const PILL_QUESTION_BG: Color = Color::Rgb { r: 58, g: 42, b: 26 };
+const PILL_DEFAULT_BG: Color = Color::Rgb {
+    r: 50,
+    g: 50,
+    b: 50,
+};
+const PILL_FACT_BG: Color = Color::Rgb {
+    r: 42,
+    g: 58,
+    b: 26,
+};
+const PILL_DECISION_BG: Color = Color::Rgb {
+    r: 30,
+    g: 58,
+    b: 95,
+};
+const PILL_PITFALL_BG: Color = Color::Rgb {
+    r: 58,
+    g: 26,
+    b: 26,
+};
+const PILL_QUESTION_BG: Color = Color::Rgb {
+    r: 58,
+    g: 42,
+    b: 26,
+};
 
 // --- Public API ---
 

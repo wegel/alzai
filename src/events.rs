@@ -15,9 +15,7 @@ pub enum EventError {
     #[error("unknown topic '{topic}'. Available: {available}")]
     TopicNotFound { topic: String, available: String },
 
-    #[error(
-        "topic file missing but events exist for '{topic}' — restore with: touch {fact_path}"
-    )]
+    #[error("topic file missing but events exist for '{topic}' — restore with: touch {fact_path}")]
     OrphanedEvents { topic: String, fact_path: String },
 
     #[error("malformed event at {path}:{line}: {detail}")]
@@ -49,10 +47,7 @@ pub fn validate_topic(paths: &RepoPaths, topic: &str) -> Result<(), EventError> 
         });
     }
 
-    let available = paths
-        .list_topics()
-        .unwrap_or_default()
-        .join(", ");
+    let available = paths.list_topics().unwrap_or_default().join(", ");
     Err(EventError::TopicNotFound {
         topic: topic.to_string(),
         available: if available.is_empty() {
@@ -111,9 +106,7 @@ pub fn append_event(event_path: &Path, event: &Event) -> Result<(), EventError> 
         .append(true)
         .open(event_path)?;
 
-    let mut line = serde_json::to_string(event).map_err(|e| {
-        std::io::Error::other(e)
-    })?;
+    let mut line = serde_json::to_string(event).map_err(|e| std::io::Error::other(e))?;
     line.push('\n');
 
     file.write_all(line.as_bytes())?;
@@ -137,13 +130,12 @@ pub fn read_all_events(event_path: &Path) -> Result<Vec<Event>, EventError> {
         if trimmed.is_empty() {
             continue;
         }
-        let event: Event = serde_json::from_str(trimmed).map_err(|e| {
-            EventError::MalformedEvent {
+        let event: Event =
+            serde_json::from_str(trimmed).map_err(|e| EventError::MalformedEvent {
                 path: event_path.to_path_buf(),
                 line: i + 1,
                 detail: e.to_string(),
-            }
-        })?;
+            })?;
         events.push(event);
     }
 

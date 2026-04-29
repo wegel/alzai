@@ -31,9 +31,7 @@ pub fn run(
     let ts = Utc::now().format("%Y-%m-%dT%H:%M:%SZ").to_string();
     let id = events::generate_event_id(&ts);
     let event_path = paths.event_file(topic);
-    let seq = events::last_seq(&event_path)
-        .context("read last seq")?
-        + 1;
+    let seq = events::last_seq(&event_path).context("read last seq")? + 1;
 
     let event = Event {
         id: id.clone(),

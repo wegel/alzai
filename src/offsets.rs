@@ -15,23 +15,20 @@ pub fn load_offsets(path: &Path) -> Result<TopicOffsets> {
         return Ok(TopicOffsets::new());
     }
 
-    let content = std::fs::read_to_string(path)
-        .with_context(|| format!("read {}", path.display()))?;
+    let content =
+        std::fs::read_to_string(path).with_context(|| format!("read {}", path.display()))?;
 
     if content.trim().is_empty() {
         return Ok(TopicOffsets::new());
     }
 
-    serde_json::from_str(&content)
-        .with_context(|| format!("parse {}", path.display()))
+    serde_json::from_str(&content).with_context(|| format!("parse {}", path.display()))
 }
 
 /// Save topic offsets atomically (temp file + rename).
 pub fn save_offsets(path: &Path, offsets: &TopicOffsets) -> Result<()> {
-    let json = serde_json::to_string_pretty(offsets)
-        .context("serialize topic offsets")?;
-    fs_util::atomic_write(path, json.as_bytes())
-        .context("write topic offsets")
+    let json = serde_json::to_string_pretty(offsets).context("serialize topic offsets")?;
+    fs_util::atomic_write(path, json.as_bytes()).context("write topic offsets")
 }
 
 /// Get the synced seq for a topic, returning 0 if absent.

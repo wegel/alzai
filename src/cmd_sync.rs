@@ -17,8 +17,7 @@ pub fn run(paths: &RepoPaths, llm_cmd: Option<&str>, json: bool) -> Result<()> {
     let cmd = llm::resolve_llm_cmd(llm_cmd)?;
     paths.ensure_dirs()?;
 
-    let mut topic_offsets = offsets::load_offsets(&paths.offsets_path)
-        .context("load offsets")?;
+    let mut topic_offsets = offsets::load_offsets(&paths.offsets_path).context("load offsets")?;
     let topics = paths.list_topics().context("list topics")?;
 
     let dirty = find_dirty_topics(paths, &topics, &topic_offsets)?;
@@ -46,8 +45,7 @@ pub fn run(paths: &RepoPaths, llm_cmd: Option<&str>, json: bool) -> Result<()> {
 
         let offset = sync_topic(paths, &cmd, topic, *synced_seq)?;
         offsets::update_topic(&mut topic_offsets, topic, offset);
-        offsets::save_offsets(&paths.offsets_path, &topic_offsets)
-            .context("save offsets")?;
+        offsets::save_offsets(&paths.offsets_path, &topic_offsets).context("save offsets")?;
 
         synced.push(serde_json::json!({
             "topic": topic,
@@ -59,11 +57,7 @@ pub fn run(paths: &RepoPaths, llm_cmd: Option<&str>, json: bool) -> Result<()> {
         let out = serde_json::json!({ "synced": synced, "skipped": [] });
         println!("{}", serde_json::to_string(&out)?);
     } else {
-        println!(
-            "  {} synced {} topic(s)",
-            colors::ok("done"),
-            synced.len(),
-        );
+        println!("  {} synced {} topic(s)", colors::ok("done"), synced.len(),);
     }
 
     Ok(())
@@ -90,12 +84,7 @@ fn find_dirty_topics(
 }
 
 /// Synthesize a single topic: read state, call LLM, write results.
-fn sync_topic(
-    paths: &RepoPaths,
-    cmd: &str,
-    topic: &str,
-    synced_seq: u64,
-) -> Result<TopicOffset> {
+fn sync_topic(paths: &RepoPaths, cmd: &str, topic: &str, synced_seq: u64) -> Result<TopicOffset> {
     let fact_path = paths.fact_file(topic);
     let current_contents = if fact_path.exists() {
         std::fs::read_to_string(&fact_path)
@@ -105,8 +94,8 @@ fn sync_topic(
     };
 
     let event_path = paths.event_file(topic);
-    let pending = events::read_events_after(&event_path, synced_seq)
-        .context("read pending events")?;
+    let pending =
+        events::read_events_after(&event_path, synced_seq).context("read pending events")?;
 
     if pending.is_empty() {
         return Ok(TopicOffset {

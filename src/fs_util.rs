@@ -4,7 +4,7 @@ use std::fs::{self, File};
 use std::io::{self, IsTerminal, Read, Write};
 use std::path::Path;
 
-use anyhow::{bail, Context, Result};
+use anyhow::{Context, Result, bail};
 
 // --- Public API ---
 
@@ -16,8 +16,7 @@ pub fn atomic_write(target: &Path, content: &[u8]) -> Result<()> {
     fs::create_dir_all(parent)?;
 
     let tmp = target.with_extension("tmp");
-    let mut file = File::create(&tmp)
-        .with_context(|| format!("create {}", tmp.display()))?;
+    let mut file = File::create(&tmp).with_context(|| format!("create {}", tmp.display()))?;
     file.write_all(content)?;
     file.sync_all()?;
 
