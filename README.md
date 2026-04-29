@@ -53,6 +53,16 @@ alzai sync --llm-cmd "claude -p"
 
 ## Commands
 
+### `alzai context`
+
+Print session-start instructions for using this repo's memory system. This
+command is read-only; it shows available topics, pending sync state, when to
+log durable memory, and the exact `alzai log` command shape.
+
+```
+alzai context
+```
+
 ### `alzai log`
 
 Append a learning to a topic's event log.
@@ -105,6 +115,7 @@ All commands accept `--json` for machine-readable output:
 
 ```
 alzai --json status
+alzai --json context
 alzai --json reflect
 alzai --json log --topic arch --kind fact --title "..." --body "..."
 ```
@@ -158,9 +169,11 @@ This repo uses `alzai` for durable project knowledge across sessions.
 
 ## At session start
 
-1. Run `alzai sync` to process any pending events from previous sessions.
-2. Run `alzai status` to see available topics.
-3. Read relevant `.agents/memory/facts/*.md` files to get up to speed.
+1. Run `alzai context` to load the memory workflow, available topics, and
+   logging triggers into the session.
+2. Read relevant `.agents/memory/facts/<topic>.md` files before changing code.
+3. If `alzai context` reports pending events, run `alzai sync` when LLM
+   synthesis is configured and appropriate.
 
 ## During your session
 

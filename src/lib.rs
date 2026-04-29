@@ -1,5 +1,6 @@
 //! alzai — repo-local agent knowledge system.
 
+pub mod cmd_context;
 pub mod cmd_log;
 pub mod cmd_reflect;
 pub mod cmd_status;

@@ -2,6 +2,7 @@
 
 use clap::{Parser, Subcommand};
 
+use alzai::cmd_context;
 use alzai::cmd_log;
 use alzai::cmd_reflect;
 use alzai::cmd_status;
@@ -24,6 +25,8 @@ struct Cli {
 
 #[derive(Subcommand)]
 enum Commands {
+    /// Show session-start instructions for using repo memory.
+    Context,
     /// Append a durable learning to the event log.
     Log {
         /// Topic slug (must match an existing facts/<topic>.md file).
@@ -60,6 +63,7 @@ fn main() -> anyhow::Result<()> {
     let paths = repo::RepoPaths::discover()?;
 
     match cli.command {
+        Commands::Context => cmd_context::run(&paths, cli.json),
         Commands::Log {
             topic,
             kind,
