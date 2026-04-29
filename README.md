@@ -89,12 +89,23 @@ alzai status
   streaming         12        0       12
 ```
 
+### `alzai reflect`
+
+Print an end-of-task checkpoint that helps an agent decide whether this session
+produced durable knowledge worth logging. This command is read-only; it never
+writes memory.
+
+```
+alzai reflect
+```
+
 ### JSON output
 
 All commands accept `--json` for machine-readable output:
 
 ```
 alzai --json status
+alzai --json reflect
 alzai --json log --topic arch --kind fact --title "..." --body "..."
 ```
 
@@ -187,6 +198,9 @@ If you think a new topic is needed, propose it to the human operator — don't
 create it yourself.
 
 ## At session end
+
+Run `alzai reflect` before finishing substantial work. If the checklist points
+to durable knowledge, log it with `alzai log`.
 
 Optionally run `alzai sync` to synthesize any events you logged. If you forget,
 the next session's sync will catch them.

@@ -12,34 +12,15 @@ use crate::types::TopicStatus;
 
 /// Run the status command: pure filesystem check, no LLM.
 pub fn run(paths: &RepoPaths, json: bool) -> Result<()> {
-    let topic_offsets = offsets::load_offsets(&paths.offsets_path)
-        .context("load offsets")?;
-    let topics = paths.list_topics().context("list topics")?;
+    let statuses = collect_statuses(paths)?;
 
-    if topics.is_empty() {
+    if statuses.is_empty() {
         if json {
             println!("[]");
         } else {
             println!("  {}", colors::dim("no topics found"));
         }
         return Ok(());
-    }
-
-    let mut statuses = Vec::new();
-    for topic in &topics {
-        let event_path = paths.event_file(topic);
-        let total = events::last_seq(&event_path).unwrap_or(0);
-        let synced = offsets::topic_seq(&topic_offsets, topic);
-        let pending = total.saturating_sub(synced);
-        let last_id = topic_offsets.get(topic.as_str()).map(|o| o.last_event_id.clone());
-
-        statuses.push(TopicStatus {
-            name: topic.clone(),
-            total_events: total,
-            pending_events: pending,
-            last_event_id: last_id,
-            synced_through_seq: synced,
-        });
     }
 
     if json {
@@ -51,10 +32,42 @@ pub fn run(paths: &RepoPaths, json: bool) -> Result<()> {
     Ok(())
 }
 
+/// Collect topic status without printing.
+pub fn collect_statuses(paths: &RepoPaths) -> Result<Vec<TopicStatus>> {
+    let topic_offsets = offsets::load_offsets(&paths.offsets_path).context("load offsets")?;
+    let topics = paths.list_topics().context("list topics")?;
+
+    let mut statuses = Vec::new();
+    for topic in &topics {
+        let event_path = paths.event_file(topic);
+        let total = events::last_seq(&event_path).unwrap_or(0);
+        let synced = offsets::topic_seq(&topic_offsets, topic);
+        let pending = total.saturating_sub(synced);
+        let last_id = topic_offsets
+            .get(topic.as_str())
+            .map(|o| o.last_event_id.clone());
+
+        statuses.push(TopicStatus {
+            name: topic.clone(),
+            total_events: total,
+            pending_events: pending,
+            last_event_id: last_id,
+            synced_through_seq: synced,
+        });
+    }
+
+    Ok(statuses)
+}
+
 // --- Private helpers ---
 
 fn print_table(statuses: &[TopicStatus]) {
-    let name_width = statuses.iter().map(|s| s.name.len()).max().unwrap_or(10).max(5);
+    let name_width = statuses
+        .iter()
+        .map(|s| s.name.len())
+        .max()
+        .unwrap_or(10)
+        .max(5);
 
     println!(
         "  {:<width$}  {:>5}  {:>7}  {:>7}",

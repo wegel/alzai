@@ -3,6 +3,7 @@
 use clap::{Parser, Subcommand};
 
 use alzai::cmd_log;
+use alzai::cmd_reflect;
 use alzai::cmd_status;
 use alzai::cmd_sync;
 use alzai::colors;
@@ -44,6 +45,8 @@ enum Commands {
         #[arg(long)]
         llm_cmd: Option<String>,
     },
+    /// Prompt whether this session produced durable knowledge worth logging.
+    Reflect,
     /// Show per-topic event counts and sync state.
     Status,
 }
@@ -57,12 +60,14 @@ fn main() -> anyhow::Result<()> {
     let paths = repo::RepoPaths::discover()?;
 
     match cli.command {
-        Commands::Log { topic, kind, title, body } => {
-            cmd_log::run(&paths, &topic, &kind, &title, body.as_deref(), cli.json)
-        }
-        Commands::Sync { llm_cmd } => {
-            cmd_sync::run(&paths, llm_cmd.as_deref(), cli.json)
-        }
+        Commands::Log {
+            topic,
+            kind,
+            title,
+            body,
+        } => cmd_log::run(&paths, &topic, &kind, &title, body.as_deref(), cli.json),
+        Commands::Sync { llm_cmd } => cmd_sync::run(&paths, llm_cmd.as_deref(), cli.json),
+        Commands::Reflect => cmd_reflect::run(&paths, cli.json),
         Commands::Status => cmd_status::run(&paths, cli.json),
     }
 }
